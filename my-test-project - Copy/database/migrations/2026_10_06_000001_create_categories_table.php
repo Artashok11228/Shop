@@ -19,6 +19,9 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        // SQLite checks the parent/child links even when dropping this table.
+        Schema::withoutForeignKeyConstraints(function () {
+            Schema::dropIfExists('categories');
+        });
     }
 };

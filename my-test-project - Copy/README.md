@@ -4,15 +4,20 @@ This is phase one: the catalog database, demo seeders, and read-only JSON endpoi
 
 ## Run it
 
-From this project directory:
+For a fresh clone, enter `my-test-project - Copy` inside the repository, then run:
 
 ```bash
 composer install
+php -r "file_exists('.env') || copy('.env.example', '.env');"
+php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
+php artisan key:generate
 php artisan migrate --seed
 php artisan serve
 ```
 
-The included `.env` uses SQLite and the database lives at `database/database.sqlite`. If setting up another copy, copy `.env.example` to `.env`, create that empty database file, and run `php artisan key:generate` once before migrating.
+The example environment uses SQLite and the local database lives at `database/database.sqlite`. Environment files, dependencies, and SQLite data are generated locally and excluded from Git. Generate the application key only during initial setup; an existing installation already has its key.
+
+The unrelated local `api/` checkout is ignored and is not a project dependency. Laravel's API routes are defined in `routes/api.php`.
 
 Browse:
 
@@ -26,10 +31,10 @@ To run checks:
 
 ```bash
 php artisan test
-php vendor/bin/pint --test app/Models app/Http/Controllers database tests/Feature/CatalogTest.php bootstrap/app.php routes/api.php
+php vendor/bin/pint --test app/Models app/Http/Controllers database tests/Feature bootstrap/app.php routes/api.php
 ```
 
-Tests use an in-memory SQLite database, separate from your development data.
+Tests use an in-memory SQLite database, separate from your development data. They also verify that seeded catalog migrations can be rolled back and reapplied while foreign-key protection remains enabled.
 
 ## Demo data
 
