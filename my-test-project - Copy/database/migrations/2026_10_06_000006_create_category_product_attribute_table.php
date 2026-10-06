@@ -13,7 +13,8 @@ return new class extends Migration
             $table->foreignId('product_attribute_id')->constrained()->cascadeOnDelete();
 
             $table->primary(['category_id', 'product_attribute_id']);
-            $table->index(['product_attribute_id', 'category_id']);
+            // MySQL limits index names to 64 characters, so use a short name.
+            $table->index(['product_attribute_id', 'category_id'], 'category_attribute_reverse_index');
         });
     }
 
